@@ -1,0 +1,10 @@
+.home__header, .home__body{
+    /* margin-left: 600px;
+    margin-right: 600px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button{
+    margin-right: 10px;
+}
