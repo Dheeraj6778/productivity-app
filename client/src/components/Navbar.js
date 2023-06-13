@@ -27,7 +27,7 @@ function Navbar({ username, setLoggedIn }) {
               <b>positive thought of the day:</b> {quote}
             </span>
             <button
-              onClick={() => setLoggedIn(false)}
+              onClick={() => {localStorage.removeItem("token");localStorage.removeItem("username");setLoggedIn(false);}}
               class="btn btn-outline-success float-right"
             >
               Logout
