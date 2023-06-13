@@ -128,6 +128,25 @@ app.post("/getTasks",async (req,res)=>{
   }
 })
 
+app.post("/deleteTask",async (req,res)=>{
+  const {task}=req.body;
+  try{
+    let resp=await Task.deleteOne({task});
+    if(resp.deletedCount===1){
+      console.log("deleted successfully");
+      return res.send("deleted the task");
+    }
+    else{
+      console.log("task not found");
+      return res.send("task not found");
+    }
+  }
+  catch(err){
+    console.log("error in deleting the task ",err);
+    return res.send("error in deleting the task");
+  }
+})
+
 let port = 3001 || process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

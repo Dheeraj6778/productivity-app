@@ -10,12 +10,22 @@ function Crud({ username }) {
   const [date, setDate] = useState("");
   const [clicked, setClicked] = useState(0);
   const [data, setData] = useState([]);
-  let handleDelete = () => {
+  let handleDelete =async (val) => {
     //do something
+    try{
+      let resp = await axios.post("http://localhost:3001/deleteTask",{task:val});
+      console.log(resp.data);
+    }catch(err){
+      console.log("error in sending a request");
+    }
     setClicked((prev) => prev + 1);
   };
-  let handleCompleted = () => {
+  let handleCompleted = (color,setColor) => {
     //do something
+    if(color===""){
+      setColor("#34eb52");
+    }
+    else if (color === "#34eb52") setColor("");
     setClicked((prev) => prev + 1);
   };
   const options = [
