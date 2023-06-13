@@ -41,7 +41,6 @@ function Login() {
           setPassword={setPassword}
           handleSubmit={handleSubmit}
         />
-        // <Dashboard username={username} setLoggedIn={setLoggedIn} />
       )}
     </div>
   );

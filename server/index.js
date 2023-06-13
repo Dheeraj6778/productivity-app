@@ -115,6 +115,19 @@ app.post("/addTask", async (req, res) => {
   
 });
 
+app.post("/getTasks",async (req,res)=>{
+  console.log("inside the get tasks endpoint");
+  console.log(req.body);
+  const {username}=req.body;
+  try{
+    const data=await Task.find({username});
+    return res.json(data);
+  }
+  catch(err){
+    console.log("error in fetching data from database");
+  }
+})
+
 let port = 3001 || process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
