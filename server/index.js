@@ -35,7 +35,7 @@ app.post("/signup", async (req, res) => {
     }
     //now encrypt the password
     const encryptedPassword = await bcrypt.hash(password, 10);
-    const userObj = await user.create({
+    let userObj = await user.create({
       username,
       firstName,
       email: email.toLowerCase(),
@@ -49,7 +49,8 @@ app.post("/signup", async (req, res) => {
         expiresIn: "2h",
       }
     );
-    userObj.token = token;
+    //userObj.token = token;
+    userObj={...userObj,token};
     //status 201 indicates creation of a resource
     res.status(201).json(userObj);
   } catch (err) {
@@ -66,7 +67,7 @@ app.post("/login", async (req, res) => {
     if (!(email && password)) {
       return res.status(400).send("all inputs are required");
     }
-    const userObj = await user.findOne({ email });
+    let userObj = await user.findOne({ email });
     const flag = await bcrypt.compare(password, userObj.password);
     if (userObj && flag === true) {
       //create the token
@@ -78,7 +79,8 @@ app.post("/login", async (req, res) => {
           expiresIn: "2h",
         }
       );
-      userObj.token = token;
+      //userObj.token = token;
+      userObj={...userObj,token};
       return res.status(200).json(userObj);
     } else return res.status(400).send("invalid credentials");
   } catch (err) {

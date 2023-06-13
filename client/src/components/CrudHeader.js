@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Select from "react-select";
-function CrudHeader({ label,date,setTask, setLabel, setDate, handleAddTask,options }) {
+function CrudHeader({
+  label,
+  date,
+  setTask,
+  setLabel,
+  setDate,
+  handleAddTask,
+  options,
+  setSearchQuery,
+  handleSearch
+}) {
   return (
     <div>
       <div>
@@ -32,8 +42,31 @@ function CrudHeader({ label,date,setTask, setLabel, setDate, handleAddTask,optio
           Add Task
         </button>
       </div>
+      <nav class="navbar">
+        <div class="container-fluid">
+          <input
+            onChange={(event)=>setSearchQuery(event.target.value)}
+            style={{ "margin-left": "235px" }}
+            className="rounded"
+            type="text"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button
+            onClick={handleSearch}
+            class="btn btn-outline-success"
+            style={{
+              "margin-right": "250px",
+              "padding-left": "48px",
+              "padding-right": "48px",
+            }}
+          >
+            Search
+          </button>
+        </div>
+      </nav>
     </div>
   );
 }
 
-export default CrudHeader
+export default CrudHeader;
