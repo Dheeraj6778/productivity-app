@@ -2,6 +2,8 @@ require("dotenv").config();
 let db = require("./config/database");
 let express = require("express");
 let cors = require("cors");
+const cron = require("node-cron");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 let app = express();
@@ -16,6 +18,46 @@ db.connect();
 const { user } = require("./model/user");
 const { Task } = require("./model/task");
 
+//schedule a cron job to send email notifications
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+});
+
+
+
+cron.schedule("0 0 9 * * *", async () => {
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  //now retrieve all the tasks that have deadline tomorrow
+  const tasks = await Task.find({ deadline: tomorrow });
+  let getEmail = async (username) => {
+    let data = await user.findOne({ username });
+    return data.email;
+  };
+
+  tasks.forEach(async (task) => {
+    let email = await getEmail(task.username);
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Task Reminder",
+      text: `You have a task with the title "${task.task}" due tomorrow.`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("error in sending the mail ,error");
+      } else {
+        console.log("email sent: ", info.response);
+      }
+    });
+  });
+});
 
 app.post("/signup", async (req, res) => {
   console.log(req.body);
@@ -50,7 +92,7 @@ app.post("/signup", async (req, res) => {
       }
     );
     //userObj.token = token;
-    userObj={...userObj,token};
+    userObj = { ...userObj, token };
     //status 201 indicates creation of a resource
     res.status(201).json(userObj);
   } catch (err) {
@@ -80,7 +122,7 @@ app.post("/login", async (req, res) => {
         }
       );
       //userObj.token = token;
-      userObj={...userObj,token};
+      userObj = { ...userObj, token };
       return res.status(200).json(userObj);
     } else return res.status(400).send("invalid credentials");
   } catch (err) {
@@ -114,42 +156,38 @@ app.post("/addTask", async (req, res) => {
   } catch (err) {
     console.log("error in pushing to the database");
   }
-  
 });
 
-app.post("/getTasks",async (req,res)=>{
+app.post("/getTasks", async (req, res) => {
   console.log("inside the get tasks endpoint");
   console.log(req.body);
-  const {username}=req.body;
-  try{
-    const data=await Task.find({username});
+  const { username } = req.body;
+  try {
+    const data = await Task.find({ username });
     return res.json(data);
-  }
-  catch(err){
+  } catch (err) {
     console.log("error in fetching data from database");
   }
-})
+});
 
-app.post("/deleteTask",async (req,res)=>{
-  const {task}=req.body;
-  try{
-    let resp=await Task.deleteOne({task});
-    if(resp.deletedCount===1){
+app.post("/deleteTask", async (req, res) => {
+  const { task } = req.body;
+  try {
+    let resp = await Task.deleteOne({ task });
+    if (resp.deletedCount === 1) {
       console.log("deleted successfully");
       return res.send("deleted the task");
-    }
-    else{
+    } else {
       console.log("task not found");
       return res.send("task not found");
     }
-  }
-  catch(err){
-    console.log("error in deleting the task ",err);
+  } catch (err) {
+    console.log("error in deleting the task ", err);
     return res.send("error in deleting the task");
   }
-})
+});
 
-let port = 3001 || process.env.PORT;
+let port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
