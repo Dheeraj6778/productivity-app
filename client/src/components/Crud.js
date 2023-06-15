@@ -47,6 +47,28 @@ function Crud({ username }) {
     let temp = originalData.filter((elem) => elem.type === filterQuery);
     setData(temp);
   };
+  let handleAscTask = () => {
+    console.log("inside handle asc task");
+    let temp = data.sort((a, b) => a.task.localeCompare(b.task));
+    setData(temp);
+  };
+  let handleDscTask = () => {
+    //do something
+    let temp = data.sort((a, b) => b.task.localeCompare(a.task));
+    console.log("inside dsc task");
+    setData(temp);
+  };
+  let handleAscDeadline = () => {
+    console.log("inside asc deadline");
+    let temp = data.sort((a, b) => a.deadline.localeCompare(b.deadline));
+    setData(temp);
+  };
+  let handleDscDeadline = () => {
+    console.log("inside dsc deadline");
+    let temp = data.sort((a, b) => b.deadline.localeCompare(a.deadline));
+    setData(temp);
+  };
+
   const options = [
     { value: "office", label: "office" },
     { value: "health", label: "health" },
@@ -97,6 +119,10 @@ function Crud({ username }) {
         handleFilter={handleFilter}
         filterQuery={filterQuery}
         setFilterQuery={setFilterQuery}
+        handleAscTask={handleAscTask}
+        handleDscTask={handleDscTask}
+        handleAscDeadline={handleAscDeadline}
+        handleDscDeadline={handleDscDeadline}
       />
       {data.map((elem) => (
         <CrudElement

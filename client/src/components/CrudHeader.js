@@ -14,6 +14,10 @@ function CrudHeader({
   setFilterQuery,
   filterQuery,
   handleFilter,
+  handleAscTask,
+  handleDscTask,
+  handleAscDeadline,
+  handleDscDeadline
 }) {
   return (
     <div>
@@ -55,7 +59,13 @@ function CrudHeader({
               placeholder="Select a label to filter tasks"
             />
           </button>
-          <button onClick={handleFilter} className="btn btn-secondary">Filter</button>
+          <button onClick={handleFilter} className="btn btn-secondary">
+            Filter
+          </button>
+          <button onClick={handleAscDeadline} className="btn btn-secondary"> ↑ deadline</button>
+          <button onClick={handleDscDeadline} className="btn btn-secondary"> ↓ deadline</button>
+          <button onClick={handleAscTask} className="btn btn-secondary"> ↑ task</button>
+          <button onClick={handleDscTask} className="btn btn-secondary"> ↓ task</button>
         </div>
       </div>
       <nav class="navbar">
