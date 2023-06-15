@@ -9,16 +9,14 @@ function Dashboard({ username, setLoggedIn }) {
       <Navbar username={username} setLoggedIn={setLoggedIn} />;
       <div class="container ">
         <div class="row">
-          <div class="col-2">
-            
-            <Horoscope/>
+          <div class="col-3">
+            <Horoscope />
           </div>
           <div class="col-8 text-center">
             {/* crud component */}
             <h2>Add Task</h2>
             <Crud username={username} />
           </div>
-          <div class="col-2 text-center">c</div>
         </div>
       </div>
     </div>

@@ -10,7 +10,10 @@ function CrudHeader({
   handleAddTask,
   options,
   setSearchQuery,
-  handleSearch
+  handleSearch,
+  setFilterQuery,
+  filterQuery,
+  handleFilter,
 }) {
   return (
     <div>
@@ -41,11 +44,24 @@ function CrudHeader({
         <button onClick={handleAddTask} className="btn btn-secondary">
           Add Task
         </button>
+        <div>
+          <button className="btn">
+            <Select
+              value={filterQuery.value}
+              onChange={(event) => {
+                setFilterQuery(event.value);
+              }}
+              options={options}
+              placeholder="Select a label to filter tasks"
+            />
+          </button>
+          <button onClick={handleFilter} className="btn btn-secondary">Filter</button>
+        </div>
       </div>
       <nav class="navbar">
         <div class="container-fluid">
           <input
-            onChange={(event)=>setSearchQuery(event.target.value)}
+            onChange={(event) => setSearchQuery(event.target.value)}
             style={{ "margin-left": "235px" }}
             className="rounded"
             type="text"
